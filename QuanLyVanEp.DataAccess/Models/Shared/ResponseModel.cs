@@ -29,7 +29,7 @@ namespace BaseApiWithIdentity.DataAccess.Models
 
         public ResponseModel NotFound()
         {
-            Message = "This item does not existed!";
+            Message = "Không tìm thấy dữ liệu";
             IsSucceed = false; 
             return this;
         }

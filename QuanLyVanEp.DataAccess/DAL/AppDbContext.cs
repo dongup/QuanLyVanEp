@@ -11,6 +11,8 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using BaseApiWithIdentity.DataAccess.DAL.Entities;
+using QuanLyVanEp.DataAccess.Entities;
+using QuanLyVanEp.DataAccess.DAL.Entities.Tables;
 
 namespace BaseApiWithIdentity.DataAccess.DAL
 {
@@ -18,6 +20,11 @@ namespace BaseApiWithIdentity.DataAccess.DAL
         UserLoginEntity, RoleClaimEntity, UserTokenEntity>
     {
         public DbSet<LogEntity> Logs { get; set; }
+        public DbSet<InputEntity> Inputs { get; set; }
+        public DbSet<OutputEntity> Outputs { get; set; }
+        public DbSet<MaterialEntity> Materials { get; set; }
+        public DbSet<ProductResponse> Products { get; set; }
+        public DbSet<LotResponse> Lots { get; set; }
 
         public AppDbContext([NotNull] DbContextOptions options) : base(options)
         {
