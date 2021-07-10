@@ -84,7 +84,7 @@ namespace BaseApiWithIdentity
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SHCCameraApi", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "QuanLyVanEp", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
@@ -133,7 +133,7 @@ namespace BaseApiWithIdentity
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "SHCCameraApi v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "QuanLyVanEp v1");
             });
 
             app.UseExceptionHandler("/api/error/handler/500");
