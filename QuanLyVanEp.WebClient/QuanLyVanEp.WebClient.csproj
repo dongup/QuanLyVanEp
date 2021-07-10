@@ -16,6 +16,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <_WebToolingArtifacts Remove="Properties\launchSettings.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Properties\launchSettings.json" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<OpenApiReference Include="ApiDocs\apidocs.json">
 			<CodeGenerator>NSwagCSharp</CodeGenerator>
 			<Namespace>ApiDocs</Namespace>

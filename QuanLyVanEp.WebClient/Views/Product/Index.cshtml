@@ -1,0 +1,60 @@
+﻿@using ApiDocs;
+@{
+    ViewData["Title"] = "Sản phẩm";
+}
+
+<div class="container-fluid p-4">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1>Danh sách sản phẩm</h1>
+        </div>
+        <div class="col-sm-6" style="text-align-last: right;">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-student-add">Thêm mới</button>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-bordered table-reposive">
+                        <thead>
+                            <tr>
+                                <th>Tên sản phẩm</th>
+                                <th class="text-center w-140">Ngày tạo</th>
+                                <th class="w-120"></th>
+                                <th class="w-70"></th>
+                                <th class="w-120"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Sản phẩm 1</td>
+                                <td>10/07/2021 16:59 AM</td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-warning">Chỉnh sửa</button>
+                                </td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-danger">Xoá</button>
+                                </td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-default">Trạng thái</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" class="text-center">Chưa có sản phẩm nào</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+
+        })
+    </script>
+}
