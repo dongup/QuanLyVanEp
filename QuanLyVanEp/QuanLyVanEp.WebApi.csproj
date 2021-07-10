@@ -5,10 +5,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\DataService\**" />
     <Compile Remove="wwwroot\**" />
+    <Content Remove="Controllers\DataService\**" />
     <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="Controllers\DataService\**" />
     <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="Controllers\DataService\**" />
     <None Remove="wwwroot\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\BaseApiController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Controllers\BaseApiController.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,11 +39,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\DataService\" />
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
