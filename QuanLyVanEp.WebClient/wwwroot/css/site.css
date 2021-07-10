@@ -1,0 +1,35 @@
+﻿.btn-primary a {
+    color: #fff;
+}
+
+.btn-warning a {
+    color: #fff;
+}
+
+.btn-danger a {
+    color: #fff;
+}
+
+.w-70 {
+    width: 70px !important;
+}
+
+.w-100 {
+    width: 100px !important;
+}
+
+.w-120 {
+    width: 120px;
+}
+
+.w-140 {
+    width: 140px;
+}
+
+table tr td {
+    vertical-align: middle !important;
+}
+
+.hidden {
+    display: none;
+}
