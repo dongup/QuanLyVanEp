@@ -5,27 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\DataService\**" />
     <Compile Remove="wwwroot\**" />
-    <Content Remove="Controllers\DataService\**" />
     <Content Remove="wwwroot\**" />
-    <EmbeddedResource Remove="Controllers\DataService\**" />
     <EmbeddedResource Remove="wwwroot\**" />
-    <None Remove="Controllers\DataService\**" />
     <None Remove="wwwroot\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Controllers\BaseApiController.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_WebToolingArtifacts Remove="Properties\launchSettings.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Controllers\BaseApiController.cs" />
-    <Content Include="Properties\launchSettings.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\DataService\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

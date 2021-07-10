@@ -43,6 +43,7 @@ namespace QuanLyVanEp.DataAccess.Entities
         /// <summary>
         /// Lịch sử sử dụng của lô hàng xuất
         /// </summary>
-        public LotResponse Lots { get; set; }
+        [ForeignKey(nameof(LotId))]
+        public LotEntity Lots { get; set; }
     }
 }

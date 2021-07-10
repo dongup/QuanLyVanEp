@@ -27,7 +27,7 @@ namespace QuanLyVanEp.DataAccess.DAL.Entities.Tables
         public int ProductId { get; set; }
 
         [ForeignKey(nameof(ProductId))]
-        public virtual ProductResponse Product { get; set; }
+        public virtual ProductEntity Product { get; set; }
 
         public ICollection<OutputEntity> Outputs { get; set; } = new HashSet<OutputEntity>();
     }

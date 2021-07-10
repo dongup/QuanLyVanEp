@@ -9,7 +9,7 @@ namespace QuanLyVanEp.DataAccess.Entities
     /// </summary>
     public class InputEntity : BaseInputEntity
     {
-        public InputEntity(BaseInputEntity baseInput)
+        public InputEntity(BaseInputEntity baseInput) 
         {
             CreatedDate = DateTime.Now;
             MaterialId = baseInput.MaterialId;
