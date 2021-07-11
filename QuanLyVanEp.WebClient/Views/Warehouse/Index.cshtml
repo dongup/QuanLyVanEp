@@ -8,6 +8,9 @@
         <div class="col-sm-6">
             <h1>Quản lý kho hàng</h1>
         </div>
+        <div class="col-sm-6" style="text-align-last: right;">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-warehouse-add">Nhập kho</button>
+        </div>
     </div>
     <div class="row mt-3">
         <div class="col-md-12">
@@ -15,29 +18,21 @@
                 <div class="card-body">
                     <table class="table table-bordered table-reposive">
                         <thead>
-                            <tr>
+                            <tr class="text-center">
                                 <th>Tên sản phẩm</th>
                                 <th>Nhóm sản phẩm</th>
                                 <th>Đã bán</th>
                                 <th>Số lượng trong kho</th>
-                                <th class="text-center w-140">Ngày tạo</th>
-                                <th class="w-120"></th>
-                                <th class="w-70"></th>
+                                <th class="text-center w-140">Ngày nhập</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr class="text-center">
                                 <td>Sản phẩm 1</td>
                                 <td>Nhóm sản phẩm 1</td>
                                 <td>10</td>
                                 <th>5</th>
                                 <td>10/07/2021 16:59 AM</td>
-                                <td class="text-center">
-                                    <button type="button" class="btn btn-warning">Chỉnh sửa</button>
-                                </td>
-                                <td class="text-center">
-                                    <button type="button" class="btn btn-danger">Xoá</button>
-                                </td>
                             </tr>
                             <tr>
                                 <td colspan="8" class="text-center">Chưa có sản phẩm nào</td>
@@ -49,6 +44,8 @@
         </div>
     </div>
 </div>
+
+<partial name="/Views/Warehouse/CreatePartial.cshtml" />
 
 @section Scripts{
     <script>

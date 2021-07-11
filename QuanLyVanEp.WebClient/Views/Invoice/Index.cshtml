@@ -8,6 +8,9 @@
         <div class="col-sm-6">
             <h1>Quản lý hoá đơn</h1>
         </div>
+        <div class="col-sm-6" style="text-align-last: right;">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-invoice-add">Tạo hoá đơn</button>
+        </div>
     </div>
     <div class="row mt-3">
         <div class="col-md-12">
@@ -47,6 +50,9 @@
         </div>
     </div>
 </div>
+
+<partial name="/Views/Invoice/CreatePartial.cshtml" />
+<partial name="/Views/Invoice/EditPartial.cshtml" />
 
 @section Scripts{
     <script>

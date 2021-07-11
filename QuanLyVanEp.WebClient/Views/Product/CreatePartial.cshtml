@@ -1,0 +1,26 @@
+﻿<div class="modal fade" id="modal-product-add">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h4 class="modal-title">Thêm mới sản phẩm</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-white">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Tên sản phẩm</label>
+                    <input id="ipt-product-add-name" class="form-control" placeholder="Nhập tên sản phẩm" />
+                </div>
+                <div class="form-group">
+                    <label>Nhóm sản phẩm</label>
+                    <select id="sel-product-add-category" class="form-control"></select>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="addProduct()">Thêm mới</button>
+            </div>
+        </div>
+    </div>
+</div>
