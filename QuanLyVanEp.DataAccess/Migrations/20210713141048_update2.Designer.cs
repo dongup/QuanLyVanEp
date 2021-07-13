@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace QuanLyVanEp.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210709145747_add-tables")]
-    partial class addtables
+    [Migration("20210713141048_update2")]
+    partial class update2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -82,7 +82,7 @@ namespace QuanLyVanEp.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "261d9c77-1d6d-4a3d-a609-6e1d18ac404b",
+                            ConcurrencyStamp = "5b030ea2-4499-44ad-857f-40cac52dd3e3",
                             IsDeleted = false,
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -90,7 +90,7 @@ namespace QuanLyVanEp.DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "157c6394-790e-4475-bb12-3265d97a4776",
+                            ConcurrencyStamp = "b1882119-f7a2-42ad-a606-4f2f20be3e97",
                             IsDeleted = false,
                             Name = "User",
                             NormalizedName = "USER"
@@ -389,6 +389,56 @@ namespace QuanLyVanEp.DataAccess.Migrations
                     b.ToTable("Lots");
                 });
 
+            modelBuilder.Entity("QuanLyVanEp.DataAccess.DAL.Entities.Tables.ProductEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Desciption")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProductCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SoldNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StockNumber")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UpdatedUserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Products");
+                });
+
             modelBuilder.Entity("QuanLyVanEp.DataAccess.DAL.Entities.Tables.ProductResponse", b =>
                 {
                     b.Property<int>("Id")
@@ -413,10 +463,10 @@ namespace QuanLyVanEp.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("ProductResponse");
                 });
 
-            modelBuilder.Entity("QuanLyVanEp.DataAccess.Entities.InputEntity", b =>
+            modelBuilder.Entity("QuanLyVanEp.DataAccess.DAL.ProductCategoryEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -429,40 +479,11 @@ namespace QuanLyVanEp.DataAccess.Migrations
                     b.Property<int>("CreatedUserId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ExpireDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("InputDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<float>("InputNumber")
-                        .HasColumnType("real");
-
-                    b.Property<string>("InvoiceNumber")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Lotno")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<int?>("MaterialId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("No")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<float>("StockNumber")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Supplier")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
@@ -472,9 +493,7 @@ namespace QuanLyVanEp.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MaterialId");
-
-                    b.ToTable("Inputs");
+                    b.ToTable("ProductCategories");
                 });
 
             modelBuilder.Entity("QuanLyVanEp.DataAccess.Entities.MaterialEntity", b =>
@@ -535,43 +554,25 @@ namespace QuanLyVanEp.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<float>("AfterNumber")
-                        .HasColumnType("real");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("CreatedUserId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("InputId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LotId")
+                    b.Property<int?>("MaterialEntityId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Lotno")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("LotsId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MaterialId")
-                        .HasColumnType("int");
-
-                    b.Property<float>("OriginNumber")
-                        .HasColumnType("real");
 
                     b.Property<DateTime>("OutputDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<float>("OutputNumber")
-                        .HasColumnType("real");
+                    b.Property<int>("OutputNumber")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Purpose")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedDate")
@@ -580,21 +581,16 @@ namespace QuanLyVanEp.DataAccess.Migrations
                     b.Property<int>("UpdatedUserId")
                         .HasColumnType("int");
 
-                    b.Property<string>("WastedNote")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("InputId");
+                    b.HasIndex("MaterialEntityId");
 
-                    b.HasIndex("LotsId");
-
-                    b.HasIndex("MaterialId");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Outputs");
                 });
 
-            modelBuilder.Entity("TaiyoshaEPE.DataAccess.Models.General.MaterialResponse", b =>
+            modelBuilder.Entity("TaiyoshaEPE.DataAccess.Models.General.InputEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -607,27 +603,44 @@ namespace QuanLyVanEp.DataAccess.Migrations
                     b.Property<int>("CreatedUserId")
                         .HasColumnType("int");
 
-                    b.Property<float>("InputNumber")
-                        .HasColumnType("real");
+                    b.Property<int>("InputNumber")
+                        .HasColumnType("int");
 
-                    b.Property<string>("MaterialCode")
+                    b.Property<string>("InvoiceNumber")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Lotno")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int>("MaterialGroup")
+                    b.Property<int?>("MaterialEntityId")
                         .HasColumnType("int");
 
-                    b.Property<string>("MaterialName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
 
-                    b.Property<float>("StockNumber")
-                        .HasColumnType("real");
+                    b.Property<string>("Supplier")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UpdatedUserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("MaterialResponse");
+                    b.HasIndex("MaterialEntityId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Inputs");
                 });
 
             modelBuilder.Entity("TaiyoshaEPE.DataAccess.Models.General.OutputReponse", b =>
@@ -637,44 +650,24 @@ namespace QuanLyVanEp.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<float>("AfterNumber")
-                        .HasColumnType("real");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("CreatedUserId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("InputId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("LotResponseId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Lotno")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("MachineId")
+                    b.Property<int>("OutputNumber")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MaterialId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
-
-                    b.Property<float>("OriginNumber")
-                        .HasColumnType("real");
-
-                    b.Property<DateTime>("OutputDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<float>("OutputNumber")
-                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
                     b.HasIndex("LotResponseId");
-
-                    b.HasIndex("MaterialId");
 
                     b.ToTable("OutputReponse");
                 });
@@ -745,34 +738,41 @@ namespace QuanLyVanEp.DataAccess.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("QuanLyVanEp.DataAccess.Entities.InputEntity", b =>
+            modelBuilder.Entity("QuanLyVanEp.DataAccess.DAL.Entities.Tables.ProductEntity", b =>
                 {
-                    b.HasOne("QuanLyVanEp.DataAccess.Entities.MaterialEntity", "Material")
-                        .WithMany("Inputs")
-                        .HasForeignKey("MaterialId");
+                    b.HasOne("QuanLyVanEp.DataAccess.DAL.ProductCategoryEntity", "ProductCategory")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Material");
+                    b.Navigation("ProductCategory");
                 });
 
             modelBuilder.Entity("QuanLyVanEp.DataAccess.Entities.OutputEntity", b =>
                 {
-                    b.HasOne("QuanLyVanEp.DataAccess.Entities.InputEntity", "Input")
+                    b.HasOne("QuanLyVanEp.DataAccess.Entities.MaterialEntity", null)
                         .WithMany("Outputs")
-                        .HasForeignKey("InputId");
+                        .HasForeignKey("MaterialEntityId");
 
-                    b.HasOne("QuanLyVanEp.DataAccess.DAL.Entities.Tables.LotResponse", "Lots")
+                    b.HasOne("QuanLyVanEp.DataAccess.DAL.Entities.Tables.ProductEntity", "Product")
                         .WithMany()
-                        .HasForeignKey("LotsId");
+                        .HasForeignKey("ProductId");
 
-                    b.HasOne("QuanLyVanEp.DataAccess.Entities.MaterialEntity", "Material")
-                        .WithMany("Outputs")
-                        .HasForeignKey("MaterialId");
+                    b.Navigation("Product");
+                });
 
-                    b.Navigation("Input");
+            modelBuilder.Entity("TaiyoshaEPE.DataAccess.Models.General.InputEntity", b =>
+                {
+                    b.HasOne("QuanLyVanEp.DataAccess.Entities.MaterialEntity", null)
+                        .WithMany("Inputs")
+                        .HasForeignKey("MaterialEntityId");
 
-                    b.Navigation("Lots");
+                    b.HasOne("QuanLyVanEp.DataAccess.DAL.Entities.Tables.ProductEntity", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
 
-                    b.Navigation("Material");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("TaiyoshaEPE.DataAccess.Models.General.OutputReponse", b =>
@@ -780,12 +780,6 @@ namespace QuanLyVanEp.DataAccess.Migrations
                     b.HasOne("QuanLyVanEp.DataAccess.DAL.Entities.Tables.LotResponse", null)
                         .WithMany("Outputs")
                         .HasForeignKey("LotResponseId");
-
-                    b.HasOne("TaiyoshaEPE.DataAccess.Models.General.MaterialResponse", "Material")
-                        .WithMany()
-                        .HasForeignKey("MaterialId");
-
-                    b.Navigation("Material");
                 });
 
             modelBuilder.Entity("BaseApiWithIdentity.DataAccess.DAL.Entities.Identity.RoleEntity", b =>
@@ -803,9 +797,9 @@ namespace QuanLyVanEp.DataAccess.Migrations
                     b.Navigation("Outputs");
                 });
 
-            modelBuilder.Entity("QuanLyVanEp.DataAccess.Entities.InputEntity", b =>
+            modelBuilder.Entity("QuanLyVanEp.DataAccess.DAL.ProductCategoryEntity", b =>
                 {
-                    b.Navigation("Outputs");
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("QuanLyVanEp.DataAccess.Entities.MaterialEntity", b =>

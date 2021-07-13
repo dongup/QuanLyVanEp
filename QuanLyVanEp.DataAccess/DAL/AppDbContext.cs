@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using BaseApiWithIdentity.DataAccess.DAL.Entities;
 using QuanLyVanEp.DataAccess.Entities;
 using QuanLyVanEp.DataAccess.DAL.Entities.Tables;
+using QuanLyVanEp.DataAccess.DAL;
+using TaiyoshaEPE.DataAccess.Models.General;
 
 namespace BaseApiWithIdentity.DataAccess.DAL
 {
@@ -23,12 +25,12 @@ namespace BaseApiWithIdentity.DataAccess.DAL
         public DbSet<InputEntity> Inputs { get; set; }
         public DbSet<OutputEntity> Outputs { get; set; }
         public DbSet<MaterialEntity> Materials { get; set; }
-        public DbSet<ProductResponse> Products { get; set; }
+        public DbSet<ProductEntity> Products { get; set; }
+        public DbSet<ProductCategoryEntity> ProductCategories { get; set; }
         public DbSet<LotResponse> Lots { get; set; }
 
         public AppDbContext([NotNull] DbContextOptions options) : base(options)
         {
-            Database.EnsureCreated();
         }
 
         protected AppDbContext()

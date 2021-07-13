@@ -18,20 +18,21 @@ namespace BaseApiWithIdentity.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class InputsController : BaseController
+    public class OutputsController : BaseController
     {
         IWebHostEnvironment _webEnv;
 
-        public InputsController(AppDbContext context) : base(context)
+        public OutputsController(AppDbContext context, UserManager<UserEntity> userManager, IWebHostEnvironment hostingEnvironment) : base(context, userManager)
         {
+            _webEnv = hostingEnvironment;
         }
 
-        // GET: api/Inputs
+        // GET: api/Outputs
         [HttpGet]
         public async Task<ActionResult<ResponseModel>> Get()
         {
-            var res = await _context.Inputs
-                .Select(x => new InputResponse(x))
+            var res = await _context.Outputs
+                .Select(x => new OutputReponse(x))
             .ToListAsync();
 
             rspns.Succeed(res);
@@ -39,70 +40,75 @@ namespace BaseApiWithIdentity.Controllers
             return rspns;
         }
 
-        // GET: api/Inputs/5
+        // GET: api/Outputs/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseModel>> GetById(int id)
         {
-            var entity = await _context.Inputs
+            var entity = await _context.Outputs
                 .Where(x => x.Id == id)
-                .Select(x => new InputResponse(x))
+                .Select(x => new OutputReponse(x))
                 .FirstOrDefaultAsync();
             if (entity == null) return rspns.NotFound();
 
             return rspns.Succeed(entity);
         }
 
-        // POST: api/Inputs
+
+        // POST: api/Outputs
         [HttpPost]
-        public async Task<ActionResult<ResponseModel>> Post(InputResponse value)
+        public async Task<ActionResult<ResponseModel>> Post(OutputReponse value)
         {
-            InputEntity entity = new InputEntity();
+            OutputEntity entity = new OutputEntity();
             ModelUtils.CopyProperty(value, entity);
-            _context.Inputs.Add(entity);
+            _context.Outputs.Add(entity);
             _context.SaveChanges();
 
             var product = _context.Products.Find(value.ProductId);
-            product.StockNumber += value.InputNumber;
+            product.StockNumber -= value.OutputNumber;
+            product.SoldNumber += value.OutputNumber;
             _context.SaveChanges();
 
             return rspns.Succeed();
         }
 
-        // PUT: api/Inputs/5
+        // PUT: api/Outputs/5
         [HttpPut("{id}")]
-        public async Task<ResponseModel> Put(int id, InputResponse value)
+        public async Task<ResponseModel> Put(int id, OutputReponse value)
         {
-            var entity = _context.Inputs.Find(id);
+            var entity = _context.Outputs.Find(id);
             if (entity == null) return rspns.NotFound();
-            var originInput = entity.InputNumber;
+            var oriOutput = entity.OutputNumber;
 
             ModelUtils.CopyProperty(value, entity);
             _context.SaveChanges();
 
             var product = _context.Products.Find(value.ProductId);
-            product.StockNumber -= originInput;
-            product.StockNumber += value.InputNumber;
+            product.StockNumber += oriOutput;
+            product.StockNumber -= value.OutputNumber;
+            product.SoldNumber -= oriOutput;
+            product.SoldNumber += value.OutputNumber;
             _context.SaveChanges();
 
             return rspns;
         }
 
-        // DELETE: api/Inputs/5
+        // DELETE: api/Outputs/5
         [HttpDelete("{id}")]
         public async Task<ResponseModel> Delete(int id)
         {
-            var entity = await _context.Inputs.FindAsync(id);
+            var entity = await _context.Outputs.FindAsync(id);
             if (entity == null)
             {
                 rspns.NotFound();
                 return rspns;
             }
 
-            _context.Inputs.Remove(entity);
+            _context.Outputs.Remove(entity);
             _context.SaveChanges();
 
             var product = _context.Products.Find(entity.ProductId);
-            product.StockNumber -= entity.InputNumber;
+            product.StockNumber += entity.OutputNumber;
+            product.SoldNumber -= entity.OutputNumber;
             _context.SaveChanges();
 
             rspns.Succeed();

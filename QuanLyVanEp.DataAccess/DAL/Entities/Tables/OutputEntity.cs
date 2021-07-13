@@ -20,30 +20,20 @@ namespace QuanLyVanEp.DataAccess.Entities
 
         }
 
-        public OutputEntity(BaseOutputEntity baseOutput)
-        {
-            this.AfterNumber = baseOutput.AfterNumber;
-            this.OriginNumber = baseOutput.OriginNumber;
-            this.OutputNumber = baseOutput.OutputNumber;
-            this.MaterialId = baseOutput.MaterialId;
-            this.OutputDate = baseOutput.OutputDate;
-            this.Purpose = baseOutput.Purpose;
-            this.CreatedUserId = baseOutput.CreatedUserId;
-            this.InputId = baseOutput.InputId;
-        }
-        
-        public int LotId { get; set; }
+        /// <summary>
+        /// Mã nguyên liệu xuất
+        /// </summary>
+        public int? ProductId { get; set; }
 
         /// <summary>
-        /// Thông tin lô hàng nhập
+        /// Số lượng lấy
         /// </summary>
-        [ForeignKey(nameof(InputId))]
-        public InputEntity Input { get; set; }
 
-        /// <summary>
-        /// Lịch sử sử dụng của lô hàng xuất
-        /// </summary>
-        [ForeignKey(nameof(LotId))]
-        public LotEntity Lots { get; set; }
+        public int OutputNumber { get; set; }
+
+        public DateTime OutputDate { get; set; }
+
+        [ForeignKey(nameof(ProductId))]
+        public ProductEntity Product { get; set; }
     }
 }

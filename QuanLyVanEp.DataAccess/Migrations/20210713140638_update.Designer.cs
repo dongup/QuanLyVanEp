@@ -4,14 +4,16 @@ using BaseApiWithIdentity.DataAccess.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace QuanLyVanEp.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210713140638_update")]
+    partial class update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,7 +82,7 @@ namespace QuanLyVanEp.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "5b030ea2-4499-44ad-857f-40cac52dd3e3",
+                            ConcurrencyStamp = "b27963c0-e433-4bdb-a98d-9437b35c4845",
                             IsDeleted = false,
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -88,7 +90,7 @@ namespace QuanLyVanEp.DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "b1882119-f7a2-42ad-a606-4f2f20be3e97",
+                            ConcurrencyStamp = "601aead8-a8e0-4be0-a058-7c0644993a9d",
                             IsDeleted = false,
                             Name = "User",
                             NormalizedName = "USER"
@@ -600,6 +602,9 @@ namespace QuanLyVanEp.DataAccess.Migrations
 
                     b.Property<int>("CreatedUserId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("InputDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("InputNumber")
                         .HasColumnType("int");

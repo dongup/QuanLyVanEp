@@ -14,4 +14,14 @@ namespace QuanLyVanEp.DataAccess.DAL
 
         public ICollection<ProductEntity> Products { get; set; } = new HashSet<ProductEntity>();
     }
+
+    public class ProductCatergoryRequest
+    {
+        public ProductCatergoryRequest()
+        {
+
+        }
+
+        public string Name { get; set; }
+    }
 }

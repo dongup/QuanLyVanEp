@@ -1,4 +1,5 @@
 ﻿using BaseApiWithIdentity.DataAccess.DAL.Entities;
+using QuanLyVanEp.DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -23,7 +24,29 @@ namespace QuanLyVanEp.DataAccess.DAL.Entities.Tables
 
         public int CategoryId { get; set; }
 
+        public int StockNumber { get; set; }
+
+        public int SoldNumber { get; set; }
+
+        public string CategoryName { get; set; }
+
         [ForeignKey(nameof(CategoryId))]
-        public ProductCategoryEntity Product { get; set; }
+        public ProductCategoryEntity ProductCategory { get; set; }
+    }
+
+    public class ProductRequest
+    {
+        public ProductRequest()
+        {
+
+        }
+
+        public string ProductCode { get; set; }
+
+        public string ProductName { get; set; }
+
+        public string Desciption { get; set; }
+
+        public int CategoryId { get; set; }
     }
 }
