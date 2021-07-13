@@ -1,6 +1,7 @@
 ﻿@using ApiDocs;
 @{
     ViewData["Title"] = "Nhóm sản phẩm";
+    ICollection<ProductCatergoryRequest> Categories = ViewBag.Categories;
 }
 
 <div class="container-fluid p-4">
@@ -23,27 +24,9 @@
                                 <th class="text-center w-140">Ngày tạo</th>
                                 <th class="w-120"></th>
                                 <th class="w-70"></th>
-                                <th class="w-120"></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Nhóm sản phẩm 1</td>
-                                <td>10/07/2021 16:59 AM</td>
-                                <td class="text-center">
-                                    <button type="button" class="btn btn-warning">Chỉnh sửa</button>
-                                </td>
-                                <td class="text-center">
-                                    <button type="button" class="btn btn-danger">Xoá</button>
-                                </td>
-                                <td class="text-center">
-                                    <button type="button" class="btn btn-default">Trạng thái</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="6" class="text-center">Chưa có nhóm sản phẩm nào</td>
-                            </tr>
-                        </tbody>
+                        <tbody id="tbl-body"></tbody>
                     </table>
                 </div>
             </div>
@@ -57,7 +40,156 @@
 @section Scripts{
     <script>
         $(function () {
-
+            GetCategory();
         })
+
+        function GetCategory() {
+            $.ajax({
+                type: "GET",
+                url: 'http://localhost:5000/api/ProductCategory',
+                data: '',
+                success: function (data) {
+                    if (data.isSucceed) {
+                        let html = '';
+                        if (data.result.length > 0) {
+                            $.each(data.result, function (index, item) {
+                                html += `<tr>
+                                        <td>${item.name}</td>
+                                        <td>${moment(item.createdDate).format('HH:mm DD/MM/yyyy')}</td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-warning" onclick="openUpdateCategory(${item.id})">Chỉnh sửa</button>
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-danger" onclick="deleteCategory(${item.id})">Xoá</button>
+                                        </td>
+                                    </tr>`;
+                            });
+                        } else {
+                            html += `<tr>
+                                        <td colspan="5" class="text-center">Chưa có nhóm sản phẩm nào</td>
+                                    </tr>`;
+                        }
+                        $('#tbl-body').html(html);
+                    } else {
+                        $(document).Toasts('create', {
+                            class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
+                        })
+                    }
+                },
+                contentType: 'application/json; charset=utf8'
+            });
+        }
+
+        function addCategory() {
+            let name = $('#ipt-category-add-name').val();
+
+            if (name == '') {
+                $(document).Toasts('create', {
+                    class: 'bg-warning', title: 'Thông báo', body: 'Tên nhóm sản phẩm không được để trống', autohide: true, delay: 750
+                })
+                return;
+            }
+
+            let result = confirm('Bạn có chắc muốn tạo nhóm sản phẩm này?')
+            if (result) {
+                $.ajax({
+                    type: "POST",
+                    url: 'http://localhost:5000/api/ProductCategory',
+                    data: JSON.stringify({ name: name }),
+                    success: function (data) {
+                        if (data.isSucceed) {
+                            $(document).Toasts('create', {
+                                class: 'bg-success', title: 'Thông báo', body: `Thêm nhóm sản phẩm thành công`, autohide: true, delay: 750
+                            })
+                            GetCategory();
+                            $('#modal-category-add').modal('hide');
+                        } else {
+                            $(document).Toasts('create', {
+                                class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
+                            })
+                        }
+                    },
+                    contentType: 'application/json; charset=utf8'
+                });
+            }
+        }
+
+        function openUpdateCategory(id) {
+            $.ajax({
+                type: "GET",
+                url: 'http://localhost:5000/api/ProductCategory/' + id,
+                data: parseInt(id),
+                success: function (data) {
+                    if (data.isSucceed) {
+                        $('#ipt-category-edit-name').val(data.result.name);
+                        $('#btn-update-category').attr('onclick', `updateCategory(${id})`);
+                        $('#modal-category-edit').modal({ backdrop: 'static' });
+                    } else {
+                        $(document).Toasts('create', {
+                            class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
+                        })
+                    }
+                },
+                contentType: 'application/json; charset=utf8'
+            });
+        }
+
+        function updateCategory(id) {
+            let name = $('#ipt-category-edit-name').val();
+
+            if (name == '') {
+                $(document).Toasts('create', {
+                    class: 'bg-warning', title: 'Thông báo', body: 'Tên nhóm sản phẩm không được để trống', autohide: true, delay: 750
+                })
+                return;
+            }
+
+            let result = confirm('Bạn có chắc muốn cập nhật nhóm sản phẩm này?')
+            if (result) {
+                $.ajax({
+                    type: "PUT",
+                    url: 'http://localhost:5000/api/ProductCategory/' + parseInt(id),
+                    data: { name: name },
+                    success: function (data) {
+                        if (data.isSucceed) {
+                            $(document).Toasts('create', {
+                                class: 'bg-success', title: 'Thông báo', body: `Cập nhật nhóm sản phẩm thành công`, autohide: true, delay: 750
+                            });
+                            GetCategory();
+                            $('#modal-category-edit').modal('hide');
+                        } else {
+                            $(document).Toasts('create', {
+                                class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
+                            })
+                        }
+                    },
+                    contentType: 'application/json; charset=utf8'
+                });
+            }
+        }
+
+        function deleteCategory(id) {
+            let result = confirm('Bạn có chắc muốn tạo nhóm sản phẩm này?')
+            if (result) {
+                $.ajax({
+                    type: "DELETE",
+                    url: 'http://localhost:5000/api/ProductCategory/' + id,
+                    data: '',
+                    success: function (data) {
+                        if (data.isSucceed) {
+                            $(document).Toasts('create', {
+                                class: 'bg-success', title: 'Thông báo', body: `Xoá nhóm sản phẩm thành công`, autohide: true, delay: 750
+                            })
+                            GetCategory();
+                        } else {
+                            $(document).Toasts('create', {
+                                class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
+                            })
+                        }
+                    },
+                    contentType: 'application/json; charset=utf8'
+                });
+            }
+        }
     </script>
 }
