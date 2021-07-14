@@ -27,7 +27,17 @@ namespace BaseApiWithIdentity.Controllers
         [HttpGet]
         public async Task<ActionResult<ResponseModel>> Get()
         {
-            var res = await _context.Products.ToListAsync();
+            var res = await _context.Products
+                .Include(p => p.ProductCategory)
+                .Select(p => new ProductEntity() { 
+                    ProductName = p.ProductName,
+                    ProductCode = p.ProductCode,
+                    ProductPrice = p.ProductPrice,
+                    CreatedDate = p.CreatedDate,
+                    CategoryName = p.CategoryName,
+                    Id = p.Id
+                })
+                .ToListAsync();
 
             rspns.Succeed(res);
             return rspns;
@@ -51,30 +61,53 @@ namespace BaseApiWithIdentity.Controllers
         public async Task<ActionResult<ResponseModel>> Post(ProductRequest value)
         {
             ProductEntity newItem = new ProductEntity();
-            newItem.ProductName = value.ProductName;
-            newItem.ProductCode = value.ProductCode;
-            newItem.Desciption = value.Desciption;
-            newItem.CategoryId = value.CategoryId;
-            newItem.CategoryName = _context.ProductCategories.Find(value.CategoryId)?.Name;
+            var found = await _context.Products.AnyAsync(p => (p.ProductName == value.ProductName || p.ProductCode == value.ProductCode)  && p.IsDeleted == false );
+            if (!found)
+            {
+                newItem.ProductName = value.ProductName;
+                newItem.ProductCode = value.ProductCode;
+                newItem.ProductPrice = value.ProductPrice;
+                newItem.Desciption = value.Desciption;
+                newItem.CategoryId = value.CategoryId;
+                newItem.CategoryName = _context.ProductCategories.Find(value.CategoryId)?.Name;
 
-            _context.Products.Add(newItem);
-            _context.SaveChanges();
-            return rspns.Succeed();
+                _context.Products.Add(newItem);
+                await _context.SaveChangesAsync();
+
+                rspns.Succeed();
+            }
+            else
+            {
+                rspns.Failed("Tên hoặc mã sản phẩm đã tồn tại");
+            }
+            
+            return rspns;
         }
 
         // PUT: api/Products/5
         [HttpPut("{id}")]
         public async Task<ResponseModel> Put(int id, ProductRequest value)
         {
-            var item = _context.Products.Find(id);
-            if (item == null) return rspns.NotFound();
-            item.ProductName = value.ProductName;
-            item.ProductCode = value.ProductCode;
-            item.Desciption = value.Desciption;
-            item.CategoryId = value.CategoryId;
-            item.CategoryName = _context.ProductCategories.Find(value.CategoryId)?.Name;
+            var found = await _context.Products.AnyAsync(p => (p.ProductName == value.ProductName || p.ProductCode == value.ProductCode) && p.IsDeleted == false && p.Id != id);
+            if (!found)
+            {
+                var item = _context.Products.Find(id);
+                if (item == null) 
+                    return rspns.NotFound();
 
-            _context.SaveChanges();
+                item.ProductName = value.ProductName;
+                item.ProductCode = value.ProductCode;
+                item.ProductPrice = value.ProductPrice;
+                item.CategoryId = value.CategoryId;
+                item.CategoryName = _context.ProductCategories.Find(value.CategoryId)?.Name;
+
+                await _context.SaveChangesAsync();
+                rspns.Succeed();
+            }
+            else
+            {
+                rspns.Failed("Tên sản phẩm đã tồn tại");
+            }
             return rspns;
         }
 

@@ -31,8 +31,16 @@ namespace BaseApiWithIdentity.Controllers
         public async Task<ActionResult<ResponseModel>> Get()
         {
             var res = await _context.Inputs
-                .Select(x => new InputResponse(x))
-            .ToListAsync();
+                .Include(ip => ip.Product)
+                .Select(ip => new { 
+                    Id = ip.Id,
+                    ProductName = ip.Product.ProductName,
+                    InputNumber = ip.InputNumber,
+                    SoldNumber = ip.Product.SoldNumber,
+                    StockNumber = ip.Product.StockNumber,
+                    CreatedDate = ip.CreatedDate
+                })
+                .ToListAsync();
 
             rspns.Succeed(res);
 

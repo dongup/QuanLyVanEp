@@ -1726,6 +1726,10 @@
             "type": "string",
             "nullable": true
           },
+          "productPrice": {
+            "type": "number",
+            "format": "double"
+          },
           "desciption": {
             "type": "string",
             "nullable": true

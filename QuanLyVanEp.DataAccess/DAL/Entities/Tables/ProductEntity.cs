@@ -13,12 +13,13 @@ namespace QuanLyVanEp.DataAccess.DAL.Entities.Tables
     {
         public ProductEntity() : base()
         {
-
         }
 
         public string ProductCode { get; set; }
 
         public string ProductName { get; set; }
+
+        public double ProductPrice { get; set; }
 
         public string Desciption { get; set; }
 
@@ -38,12 +39,13 @@ namespace QuanLyVanEp.DataAccess.DAL.Entities.Tables
     {
         public ProductRequest()
         {
-
         }
 
         public string ProductCode { get; set; }
 
         public string ProductName { get; set; }
+
+        public double ProductPrice { get; set; }
 
         public string Desciption { get; set; }
 

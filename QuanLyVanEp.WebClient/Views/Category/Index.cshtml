@@ -53,20 +53,20 @@
                         let html = '';
                         if (data.result.length > 0) {
                             $.each(data.result, function (index, item) {
-                                html += `<tr>
-                                        <td>${item.name}</td>
-                                        <td>${moment(item.createdDate).format('HH:mm DD/MM/yyyy')}</td>
-                                        <td class="text-center">
-                                            <button type="button" class="btn btn-warning" onclick="openUpdateCategory(${item.id})">Chỉnh sửa</button>
-                                        </td>
-                                        <td class="text-center">
-                                            <button type="button" class="btn btn-danger" onclick="deleteCategory(${item.id})">Xoá</button>
-                                        </td>
-                                    </tr>`;
+                                html += `<tr class="text-center">
+                                            <td class="text-left">${item.name}</td>
+                                            <td>${moment(item.createdDate).format('HH:mm DD/MM/yyyy')}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-warning" onclick="openUpdateCategory(${item.id})">Chỉnh sửa</button>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger" onclick="deleteCategory(${item.id})">Xoá</button>
+                                            </td>
+                                        </tr>`;
                             });
                         } else {
                             html += `<tr>
-                                        <td colspan="5" class="text-center">Chưa có nhóm sản phẩm nào</td>
+                                        <td colspan="4" class="text-center">Chưa có nhóm sản phẩm nào</td>
                                     </tr>`;
                         }
                         $('#tbl-body').html(html);
@@ -149,7 +149,7 @@
                 $.ajax({
                     type: "PUT",
                     url: 'http://localhost:5000/api/ProductCategory/' + parseInt(id),
-                    data: { name: name },
+                    data: JSON.stringify({ name: name }),
                     success: function (data) {
                         if (data.isSucceed) {
                             $(document).Toasts('create', {

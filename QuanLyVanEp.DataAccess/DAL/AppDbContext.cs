@@ -18,8 +18,7 @@ using TaiyoshaEPE.DataAccess.Models.General;
 
 namespace BaseApiWithIdentity.DataAccess.DAL
 {
-    public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int, UserClaimEntity, UserRoleEntity, 
-        UserLoginEntity, RoleClaimEntity, UserTokenEntity>
+    public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int, UserClaimEntity, UserRoleEntity, UserLoginEntity, RoleClaimEntity, UserTokenEntity>
     {
         public DbSet<LogEntity> Logs { get; set; }
         public DbSet<InputEntity> Inputs { get; set; }

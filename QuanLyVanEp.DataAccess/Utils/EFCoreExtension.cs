@@ -12,13 +12,10 @@ namespace BaseApiWithIdentity.DataAccess.Utils
 {
     public static class EFCoreExtension
     {
-        public static DataTable GetDataTable(this DbContext context, string sqlQuery,
-                                     params object[] prms)
+        public static DataTable GetDataTable(this DbContext context, string sqlQuery, params object[] prms)
         {
-
             sqlQuery += " ";
             sqlQuery += string.Join(", ", prms.Select(x => $"'{x}'"));
-            //Console.WriteLine($"[{DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}]: Executing query: {sqlQuery}");
 
             DataTable dataTable = new DataTable();
             DbConnection connection = context.Database.GetDbConnection();
@@ -34,7 +31,6 @@ namespace BaseApiWithIdentity.DataAccess.Utils
                     adapter.Fill(dataTable);
                 }
             }
-            //Console.WriteLine($"[{DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}]: Executed query: {sqlQuery}");
 
             return dataTable;
         }
@@ -59,9 +55,6 @@ namespace BaseApiWithIdentity.DataAccess.Utils
                 cmd.CommandText = sqlQuery;
                 rowEffected = cmd.ExecuteNonQuery();
             }
-
-            //var stats = connection.RetrieveStatistics();
-            //var firstCommandExecutionTimeInMs = (long)stats["ExecutionTime"];
 
             if (connection.State == ConnectionState.Open)
             {
@@ -90,9 +83,6 @@ namespace BaseApiWithIdentity.DataAccess.Utils
                 cmd.CommandText = sqlQuery;
                 result = cmd.ExecuteScalar();
             }
-
-            //var stats = connection.RetrieveStatistics();
-            //var firstCommandExecutionTimeInMs = (long)stats["ExecutionTime"];
 
             if (connection.State == ConnectionState.Open)
             {

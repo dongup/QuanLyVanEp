@@ -19,8 +19,10 @@
                     <table class="table table-bordered table-reposive">
                         <thead>
                             <tr class="text-center">
-                                <th>Tiêu đề</th>
-                                <th>Số lượng nhập/bán</th>
+                                <th>Mã hoá đơn</th>
+                                <th>Tên sản phẩm bán</th>
+                                <th>Số lượng bán</th>
+                                <th>Số tiền</th>
                                 <th class="w-140">Ngày tạo</th>
                                 <th class="w-120"></th>
                             </tr>
@@ -53,21 +55,20 @@
                         let html = '';
                         if (data.result.length > 0) {
                             $.each(data.result, function (index, item) {
-                                html += `<tr>
-                                            <td>${item.productId}</td>
+                                html += `<tr class="text-center">
+                                            <td>HD000${item.id}</td>
+                                            <td>${item.productName}</td>
                                             <td>${item.outputNumber}</td>
+                                            <td>${item.outputPrice == null ? 0 : (Math.round(item.outputPrice * 100) / 100).toLocaleString()} VNĐ</td>
                                             <td>${moment(item.createdDate).format('HH:mm DD/MM/yyyy')}</td>
-                                            <td class="text-center">
+                                            <td>
                                                 <button type="button" class="btn btn-warning" onclick="openUpdateInvoice(${item.id})">Chỉnh sửa</button>
-                                            </td>
-                                            <td class="text-center">
-                                                <button type="button" class="btn btn-danger" onclick="deleteInvoice(${item.id})">Xoá</button>
                                             </td>
                                         </tr>`;
                             });
                         } else {
                             html += `<tr>
-                                        <td colspan="5" class="text-center">Chưa có hoá đơn nào</td>
+                                        <td colspan="6" class="text-center">Chưa có hoá đơn nào</td>
                                     </tr>`;
                         }
                         $('#tbl-body').html(html);
@@ -108,9 +109,9 @@
             let number = $('#ipt-invoice-add-number').val();
             let idProduct = $('#sel-invoice-add-product').val();
 
-            if (number == '') {
+            if (number == '' || number == 0) {
                 $(document).Toasts('create', {
-                    class: 'bg-warning', title: 'Thông báo', body: 'Số lượng không được để trống', autohide: true, delay: 750
+                    class: 'bg-warning', title: 'Thông báo', body: 'Số lượng không nhỏ hơn 0', autohide: true, delay: 750
                 })
                 return;
             }
@@ -120,7 +121,7 @@
                 $.ajax({
                     type: "POST",
                     url: 'http://localhost:5000/api/Outputs',
-                    data: JSON.stringify({ outputNumber: number, productId: idProduct }),
+                    data: JSON.stringify({ outputNumber: parseInt(number), productId: idProduct }),
                     success: function (data) {
                         if (data.isSucceed) {
                             $(document).Toasts('create', {

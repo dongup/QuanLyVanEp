@@ -1,7 +1,5 @@
 ﻿using BaseApiWithIdentity.DataAccess.Utils;
 using QuanLyVanEp.DataAccess.Entities;
-using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace TaiyoshaEPE.DataAccess.Models.General
 {
@@ -19,22 +17,12 @@ namespace TaiyoshaEPE.DataAccess.Models.General
             ModelUtils.CopyProperty(entity, this);
         }
 
-        /// <summary>
-        /// Mã nguyên liệu xuất
-        /// </summary>
+        public string OutputCode { get; set; }
+
+        public int OutputNumber { get => outputNumber; set => outputNumber = value; }
+
         public int? ProductId { get; set; }
 
-        /// <summary>
-        /// Số lượng lấy
-        /// </summary>
-
-        public int OutputNumber
-        {
-            get => outputNumber;
-            set
-            {
-                outputNumber = value;
-            }
-        }
+        public double OutputPrice { get; set; }
     }
 }

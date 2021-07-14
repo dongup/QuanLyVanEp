@@ -14,7 +14,6 @@ namespace BaseApiWithIdentity.DataAccess.DTO
     {
         public BaseUserDTO()
         {
-
         }
 
         public BaseUserDTO(UserEntity us)
@@ -58,18 +57,22 @@ namespace BaseApiWithIdentity.DataAccess.DTO
 
         [Required(ErrorMessage = "Full name is required!")]
         public string FullName { get; set; }
+
         public string Avatar { get; set; }
 
         public string Email { get; set; }
+
         public string Phone { get; set; }
 
         [Required(ErrorMessage = "Please select a role")]
         public string RoleName { get; set; }
 
         protected DateTime CreatedDate { get; set; }
+
         protected int? CreatedUserId { get; set; }
 
         protected DateTime UpdatedDate { get; set; }
+
         protected int UpdatedUserId { get; set; }
     }
 
@@ -77,12 +80,10 @@ namespace BaseApiWithIdentity.DataAccess.DTO
     {
         public AddUserDTO()
         {
-
         }
 
         public AddUserDTO(UserEntity us) : base(us) 
         {
-
         } 
 
         [Required(ErrorMessage = "Password is required!")]
@@ -93,6 +94,7 @@ namespace BaseApiWithIdentity.DataAccess.DTO
     {
         [Required(ErrorMessage = "Username is requried!")]
         public string UserName { get; set; }
+
         [Required(ErrorMessage = "Password is requried!")]
         public string Password { get; set; }
     }

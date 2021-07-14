@@ -32,8 +32,15 @@ namespace BaseApiWithIdentity.Controllers
         public async Task<ActionResult<ResponseModel>> Get()
         {
             var res = await _context.Outputs
-                .Select(x => new OutputReponse(x))
-            .ToListAsync();
+                .Include(op => op.Product)
+                .Select(op => new { 
+                    Id = op.Id,
+                    ProductName = op.Product.ProductName,
+                    OutputNumber = op.OutputNumber,
+                    OutputPrice = op.OutputPrice,
+                    CreatedDate = op.CreatedDate
+                })
+                .ToListAsync();
 
             rspns.Succeed(res);
 
@@ -53,41 +60,63 @@ namespace BaseApiWithIdentity.Controllers
             return rspns.Succeed(entity);
         }
 
-
         // POST: api/Outputs
         [HttpPost]
         public async Task<ActionResult<ResponseModel>> Post(OutputReponse value)
         {
-            OutputEntity entity = new OutputEntity();
-            ModelUtils.CopyProperty(value, entity);
-            _context.Outputs.Add(entity);
-            _context.SaveChanges();
-
             var product = _context.Products.Find(value.ProductId);
-            product.StockNumber -= value.OutputNumber;
-            product.SoldNumber += value.OutputNumber;
-            _context.SaveChanges();
+            if (product.StockNumber > 0)
+            {
+                OutputEntity newItem = new OutputEntity();
 
-            return rspns.Succeed();
+                newItem.ProductId = value.ProductId;
+                newItem.OutputNumber = value.OutputNumber;
+                newItem.OutputPrice = newItem.OutputNumber * product.ProductPrice;
+                _context.Outputs.Add(newItem);
+                await _context.SaveChangesAsync();
+
+                product.StockNumber -= value.OutputNumber;
+                product.SoldNumber += value.OutputNumber;
+                await _context.SaveChangesAsync();
+
+                rspns.Succeed();
+            }
+            else
+            {
+                rspns.Failed("Kiểm tra số lượng sản phẩm trong kho");
+            }
+
+            return rspns;
         }
 
         // PUT: api/Outputs/5
         [HttpPut("{id}")]
         public async Task<ResponseModel> Put(int id, OutputReponse value)
         {
-            var entity = _context.Outputs.Find(id);
-            if (entity == null) return rspns.NotFound();
-            var oriOutput = entity.OutputNumber;
-
-            ModelUtils.CopyProperty(value, entity);
-            _context.SaveChanges();
-
             var product = _context.Products.Find(value.ProductId);
-            product.StockNumber += oriOutput;
-            product.StockNumber -= value.OutputNumber;
-            product.SoldNumber -= oriOutput;
-            product.SoldNumber += value.OutputNumber;
-            _context.SaveChanges();
+            if (product.StockNumber > 0)
+            {
+                var entity = _context.Outputs.Find(id);
+                if (entity == null) 
+                    return rspns.NotFound();
+
+                entity.ProductId = value.ProductId;
+                entity.OutputNumber = value.OutputNumber;
+                entity.OutputPrice = value.OutputPrice * product.ProductPrice;
+                await _context.SaveChangesAsync();
+                
+                var oriOutput = entity.OutputNumber;
+                product.StockNumber += oriOutput;
+                product.StockNumber -= value.OutputNumber;
+                product.SoldNumber -= oriOutput;
+                product.SoldNumber += value.OutputNumber;
+                await _context.SaveChangesAsync();
+                rspns.Succeed();
+            }
+            else
+            {
+                rspns.Failed("Kiểm tra số lượng sản phẩm trong kho");
+            }
 
             return rspns;
         }

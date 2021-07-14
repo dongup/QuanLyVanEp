@@ -4,14 +4,16 @@ using BaseApiWithIdentity.DataAccess.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace QuanLyVanEp.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210714150443_update3")]
+    partial class update3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,7 +82,7 @@ namespace QuanLyVanEp.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "b93f9410-deff-4a1b-9edb-2a4121be4dd1",
+                            ConcurrencyStamp = "06dcd3e8-8b41-42bb-bbf2-3d64ff2e7779",
                             IsDeleted = false,
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -88,7 +90,7 @@ namespace QuanLyVanEp.DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "36f26fbb-b7a9-4d99-ba5e-d7c19397ba33",
+                            ConcurrencyStamp = "662e185b-55c9-4a68-aa79-f17e933ec257",
                             IsDeleted = false,
                             Name = "User",
                             NormalizedName = "USER"
@@ -418,9 +420,6 @@ namespace QuanLyVanEp.DataAccess.Migrations
                     b.Property<string>("ProductName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("ProductPrice")
-                        .HasColumnType("float");
-
                     b.Property<int>("SoldNumber")
                         .HasColumnType("int");
 
@@ -576,9 +575,6 @@ namespace QuanLyVanEp.DataAccess.Migrations
                     b.Property<int>("OutputNumber")
                         .HasColumnType("int");
 
-                    b.Property<double>("OutputPrice")
-                        .HasColumnType("float");
-
                     b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
@@ -665,9 +661,6 @@ namespace QuanLyVanEp.DataAccess.Migrations
 
                     b.Property<int?>("LotResponseId")
                         .HasColumnType("int");
-
-                    b.Property<string>("OutputCode")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OutputNumber")
                         .HasColumnType("int");

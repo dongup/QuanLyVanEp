@@ -20,7 +20,8 @@
                         <thead>
                             <tr class="text-center">
                                 <th>Tên sản phẩm</th>
-                                <th>Đã Nhập</th>
+                                <th>Đã nhập</th>
+                                <th>Đã bán</th>
                                 <th>Số lượng trong kho</th>
                                 <th class="text-center w-140">Ngày nhập</th>
                             </tr>
@@ -52,10 +53,11 @@
                         let html = '';
                         if (data.result.length > 0) {
                             $.each(data.result, function (index, item) {
-                                html += `<tr>
-                                            <td>${item.productId}</td>
+                                html += `<tr class="text-center">
+                                            <td>${item.productName}</td>
                                             <td>${item.inputNumber}</td>
-                                            <td>${item.inputNumber}</td>
+                                            <td>${item.soldNumber}</td>
+                                            <td>${item.stockNumber}</td>
                                             <td>${moment(item.createdDate).format('HH:mm DD/MM/yyyy')}</td>
                                         </tr>`;
                             });
