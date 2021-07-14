@@ -28,8 +28,7 @@ namespace BaseApiWithIdentity.Controllers
         {
             var res = await _context.ProductCategories.ToListAsync();
 
-            rspns.Succeed(res);
-            return rspns;
+            return rspns.Succeed(res);
         }
 
         // GET: api/Products/5
@@ -52,7 +51,7 @@ namespace BaseApiWithIdentity.Controllers
             newItem.Name = value.Name;
 
             _context.ProductCategories.Add(newItem);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return rspns.Succeed();
         }
 
@@ -64,8 +63,8 @@ namespace BaseApiWithIdentity.Controllers
             if (entity == null) return rspns.NotFound();
             entity.Name = value.Name;
 
-            _context.SaveChanges();
-            return rspns;
+            await _context.SaveChangesAsync();
+            return rspns.Succeed();
         }
 
         // DELETE: api/Products/5

@@ -56,7 +56,7 @@ namespace BaseApiWithIdentity.WebApi.MiddleWares
                 }
 
                 LogModel log = new LogModel(context);
-                log.RequestUserId = user.Id;
+                //log.RequestUserId = user.Id;
                 log.Token = token;
                 log.RequestBody = body;
                 Console.WriteLine("=========Saving log=========");
