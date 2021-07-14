@@ -20,24 +20,12 @@
                         <thead>
                             <tr class="text-center">
                                 <th>Tên sản phẩm</th>
-                                <th>Nhóm sản phẩm</th>
-                                <th>Đã bán</th>
+                                <th>Đã Nhập</th>
                                 <th>Số lượng trong kho</th>
                                 <th class="text-center w-140">Ngày nhập</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr class="text-center">
-                                <td>Sản phẩm 1</td>
-                                <td>Nhóm sản phẩm 1</td>
-                                <td>10</td>
-                                <th>5</th>
-                                <td>10/07/2021 16:59 AM</td>
-                            </tr>
-                            <tr>
-                                <td colspan="8" class="text-center">Chưa có sản phẩm nào</td>
-                            </tr>
-                        </tbody>
+                        <tbody id="tbl-body"></tbody>
                     </table>
                 </div>
             </div>
@@ -50,7 +38,179 @@
 @section Scripts{
     <script>
         $(function () {
-
+            GetWarehouse();
+            GetListProduct();
         })
+
+        function GetWarehouse() {
+            $.ajax({
+                type: "GET",
+                url: 'http://localhost:5000/api/Inputs',
+                data: '',
+                success: function (data) {
+                    if (data.isSucceed) {
+                        let html = '';
+                        if (data.result.length > 0) {
+                            $.each(data.result, function (index, item) {
+                                html += `<tr>
+                                            <td>${item.productId}</td>
+                                            <td>${item.inputNumber}</td>
+                                            <td>${item.inputNumber}</td>
+                                            <td>${moment(item.createdDate).format('HH:mm DD/MM/yyyy')}</td>
+                                        </tr>`;
+                            });
+                        } else {
+                            html += `<tr>
+                                        <td colspan="5" class="text-center">Chưa có sản phẩm nào trong kho</td>
+                                    </tr>`;
+                        }
+                        $('#tbl-body').html(html);
+                    } else {
+                        $(document).Toasts('create', {
+                            class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
+                        })
+                    }
+                },
+                contentType: 'application/json; charset=utf8'
+            });
+        }
+
+        function GetListProduct() {
+            $.ajax({
+                type: "GET",
+                url: 'http://localhost:5000/api/Product',
+                data: '',
+                success: function (data) {
+                    if (data.isSucceed) {
+                        let html = '';
+                        $.each(data.result, function (index, item) {
+                            html += `<option value="${item.id}">${item.productName}</option>`
+                        });
+                        $('#sel-warehouse-add-product').html(html);
+                        $('#sel-warehouse-edit-product').html(html);
+                    } else {
+                        $(document).Toasts('create', {
+                            class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
+                        })
+                    }
+                },
+                contentType: 'application/json; charset=utf8'
+            });
+        }
+
+        function addWarehouse() {
+            let number = $('#ipt-warehouse-add-number').val();
+            let idProduct = $('#sel-warehouse-add-product').val();
+
+            if (number == '') {
+                $(document).Toasts('create', {
+                    class: 'bg-warning', title: 'Thông báo', body: 'Số lượng không được để trống', autohide: true, delay: 750
+                })
+                return;
+            }
+
+            let result = confirm('Bạn có chắc muốn tạo hoá đơn này?')
+            if (result) {
+                $.ajax({
+                    type: "POST",
+                    url: 'http://localhost:5000/api/Inputs',
+                    data: JSON.stringify({ inputNumber: number, productId: idProduct }),
+                    success: function (data) {
+                        if (data.isSucceed) {
+                            $(document).Toasts('create', {
+                                class: 'bg-success', title: 'Thông báo', body: `Thêm hoá đơn thành công`, autohide: true, delay: 750
+                            })
+                            GetWarehouse();
+                            $('#modal-warehouse-add').modal('hide');
+                        } else {
+                            $(document).Toasts('create', {
+                                class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
+                            })
+                        }
+                    },
+                    contentType: 'application/json; charset=utf8'
+                });
+            }
+        }
+
+        function openUpdateWarehouse(id) {
+            $.ajax({
+                type: "GET",
+                url: 'http://localhost:5000/api/Warehouse/' + id,
+                data: parseInt(id),
+                success: function (data) {
+                    if (data.isSucceed) {
+                        $('#ipt-Warehouse-edit-name').val(data.result.WarehouseName);
+                        $('#sel-Warehouse-edit-category').val(data.result.categoryId).trigger('change');
+                        $('#btn-update-Warehouse').attr('onclick', `updateWarehouse(${id})`);
+                        $('#modal-Warehouse-edit').modal({ backdrop: 'static' });
+                    } else {
+                        $(document).Toasts('create', {
+                            class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
+                        })
+                    }
+                },
+                contentType: 'application/json; charset=utf8'
+            });
+        }
+
+        function updateWarehouse(id) {
+            let name = $('#ipt-Warehouse-edit-name').val();
+            let idCategory = $('#sel-Warehouse-edit-category').val();
+
+            if (name == '') {
+                $(document).Toasts('create', {
+                    class: 'bg-warning', title: 'Thông báo', body: 'Tên sản phẩm không được để trống', autohide: true, delay: 750
+                })
+                return;
+            }
+
+            let result = confirm('Bạn có chắc muốn cập nhật sản phẩm này?')
+            if (result) {
+                $.ajax({
+                    type: "PUT",
+                    url: 'http://localhost:5000/api/Warehouse/' + id,
+                    data: JSON.stringify({ WarehouseName: name, categoryId: idCategory }),
+                    success: function (data) {
+                        if (data.isSucceed) {
+                            $(document).Toasts('create', {
+                                class: 'bg-success', title: 'Thông báo', body: `Cập nhật sản phẩm thành công`, autohide: true, delay: 750
+                            });
+                            GetWarehouse();
+                            $('#modal-Warehouse-edit').modal('hide');
+                        } else {
+                            $(document).Toasts('create', {
+                                class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
+                            })
+                        }
+                    },
+                    contentType: 'application/json; charset=utf8'
+                });
+            }
+        }
+
+        function deleteWarehouse(id) {
+            let result = confirm('Bạn có chắc muốn tạo nhóm sản phẩm này?')
+            if (result) {
+                $.ajax({
+                    type: "DELETE",
+                    url: 'http://localhost:5000/api/Warehouse/' + id,
+                    data: '',
+                    success: function (data) {
+                        if (data.isSucceed) {
+                            $(document).Toasts('create', {
+                                class: 'bg-success', title: 'Thông báo', body: `Xoá nhóm sản phẩm thành công`, autohide: true, delay: 750
+                            })
+                            GetWarehouse();
+                        } else {
+                            $(document).Toasts('create', {
+                                class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
+                            })
+                        }
+                    },
+                    contentType: 'application/json; charset=utf8'
+                });
+            }
+        }
     </script>
 }

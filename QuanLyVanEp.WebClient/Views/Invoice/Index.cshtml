@@ -20,30 +20,12 @@
                         <thead>
                             <tr class="text-center">
                                 <th>Tiêu đề</th>
-                                <th>Loại hoá đơn</th>
                                 <th>Số lượng nhập/bán</th>
                                 <th class="w-140">Ngày tạo</th>
                                 <th class="w-120"></th>
-                                <th class="w-70"></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr class="text-center">
-                                <td>#1</td>
-                                <td>Hoá đơn nhập</td>
-                                <th>5</th>
-                                <td>10/07/2021 16:59 AM</td>
-                                <td class="text-center">
-                                    <button type="button" class="btn btn-warning">Chỉnh sửa</button>
-                                </td>
-                                <td class="text-center">
-                                    <button type="button" class="btn btn-danger">Xoá</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="7" class="text-center">Chưa có sản phẩm nào</td>
-                            </tr>
-                        </tbody>
+                        <tbody id="tbl-body"></tbody>
                     </table>
                 </div>
             </div>
@@ -57,7 +39,184 @@
 @section Scripts{
     <script>
         $(function () {
-
+            GetInvoice();
+            GetListProduct();
         })
+
+        function GetInvoice() {
+            $.ajax({
+                type: "GET",
+                url: 'http://localhost:5000/api/Outputs',
+                data: '',
+                success: function (data) {
+                    if (data.isSucceed) {
+                        let html = '';
+                        if (data.result.length > 0) {
+                            $.each(data.result, function (index, item) {
+                                html += `<tr>
+                                            <td>${item.productId}</td>
+                                            <td>${item.outputNumber}</td>
+                                            <td>${moment(item.createdDate).format('HH:mm DD/MM/yyyy')}</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-warning" onclick="openUpdateInvoice(${item.id})">Chỉnh sửa</button>
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-danger" onclick="deleteInvoice(${item.id})">Xoá</button>
+                                            </td>
+                                        </tr>`;
+                            });
+                        } else {
+                            html += `<tr>
+                                        <td colspan="5" class="text-center">Chưa có hoá đơn nào</td>
+                                    </tr>`;
+                        }
+                        $('#tbl-body').html(html);
+                    } else {
+                        $(document).Toasts('create', {
+                            class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
+                        })
+                    }
+                },
+                contentType: 'application/json; charset=utf8'
+            });
+        }
+
+        function GetListProduct() {
+            $.ajax({
+                type: "GET",
+                url: 'http://localhost:5000/api/Product',
+                data: '',
+                success: function (data) {
+                    if (data.isSucceed) {
+                        let html = '';
+                        $.each(data.result, function (index, item) {
+                            html += `<option value="${item.id}">${item.productName}</option>`
+                        });
+                        $('#sel-invoice-add-product').html(html);
+                        $('#sel-invoice-edit-product').html(html);
+                    } else {
+                        $(document).Toasts('create', {
+                            class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
+                        })
+                    }
+                },
+                contentType: 'application/json; charset=utf8'
+            });
+        }
+
+        function addInvoice() {
+            let number = $('#ipt-invoice-add-number').val();
+            let idProduct = $('#sel-invoice-add-product').val();
+
+            if (number == '') {
+                $(document).Toasts('create', {
+                    class: 'bg-warning', title: 'Thông báo', body: 'Số lượng không được để trống', autohide: true, delay: 750
+                })
+                return;
+            }
+
+            let result = confirm('Bạn có chắc muốn tạo hoá đơn này?')
+            if (result) {
+                $.ajax({
+                    type: "POST",
+                    url: 'http://localhost:5000/api/Outputs',
+                    data: JSON.stringify({ outputNumber: number, productId: idProduct }),
+                    success: function (data) {
+                        if (data.isSucceed) {
+                            $(document).Toasts('create', {
+                                class: 'bg-success', title: 'Thông báo', body: `Thêm hoá đơn thành công`, autohide: true, delay: 750
+                            })
+                            GetInvoice();
+                            $('#modal-invoice-add').modal('hide');
+                        } else {
+                            $(document).Toasts('create', {
+                                class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
+                            })
+                        }
+                    },
+                    contentType: 'application/json; charset=utf8'
+                });
+            }
+        }
+
+        function openUpdateInvoice(id) {
+            $.ajax({
+                type: "GET",
+                url: 'http://localhost:5000/api/Invoice/' + id,
+                data: parseInt(id),
+                success: function (data) {
+                    if (data.isSucceed) {
+                        $('#ipt-Invoice-edit-name').val(data.result.InvoiceName);
+                        $('#sel-Invoice-edit-category').val(data.result.categoryId).trigger('change');
+                        $('#btn-update-Invoice').attr('onclick', `updateInvoice(${id})`);
+                        $('#modal-Invoice-edit').modal({ backdrop: 'static' });
+                    } else {
+                        $(document).Toasts('create', {
+                            class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
+                        })
+                    }
+                },
+                contentType: 'application/json; charset=utf8'
+            });
+        }
+
+        function updateInvoice(id) {
+            let name = $('#ipt-Invoice-edit-name').val();
+            let idCategory = $('#sel-Invoice-edit-category').val();
+
+            if (name == '') {
+                $(document).Toasts('create', {
+                    class: 'bg-warning', title: 'Thông báo', body: 'Tên sản phẩm không được để trống', autohide: true, delay: 750
+                })
+                return;
+            }
+
+            let result = confirm('Bạn có chắc muốn cập nhật sản phẩm này?')
+            if (result) {
+                $.ajax({
+                    type: "PUT",
+                    url: 'http://localhost:5000/api/Invoice/' + id,
+                    data: JSON.stringify({ InvoiceName: name, categoryId: idCategory }),
+                    success: function (data) {
+                        if (data.isSucceed) {
+                            $(document).Toasts('create', {
+                                class: 'bg-success', title: 'Thông báo', body: `Cập nhật sản phẩm thành công`, autohide: true, delay: 750
+                            });
+                            GetInvoice();
+                            $('#modal-Invoice-edit').modal('hide');
+                        } else {
+                            $(document).Toasts('create', {
+                                class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
+                            })
+                        }
+                    },
+                    contentType: 'application/json; charset=utf8'
+                });
+            }
+        }
+
+        function deleteInvoice(id) {
+            let result = confirm('Bạn có chắc muốn tạo nhóm sản phẩm này?')
+            if (result) {
+                $.ajax({
+                    type: "DELETE",
+                    url: 'http://localhost:5000/api/Invoice/' + id,
+                    data: '',
+                    success: function (data) {
+                        if (data.isSucceed) {
+                            $(document).Toasts('create', {
+                                class: 'bg-success', title: 'Thông báo', body: `Xoá nhóm sản phẩm thành công`, autohide: true, delay: 750
+                            })
+                            GetInvoice();
+                        } else {
+                            $(document).Toasts('create', {
+                                class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
+                            })
+                        }
+                    },
+                    contentType: 'application/json; charset=utf8'
+                });
+            }
+        }
     </script>
 }
