@@ -13,7 +13,8 @@ namespace TaiyoshaEPE.DataAccess.Models.General
 
         public OutputReponse(OutputEntity entity) : base(entity)
         {
-            if (entity == null) return;
+            if (entity == null) 
+                return;
             ModelUtils.CopyProperty(entity, this);
         }
 

@@ -52,9 +52,13 @@ namespace BaseApiWithIdentity.Controllers
         public async Task<ActionResult<ResponseModel>> GetById(int id)
         {
             var entity = await _context.Outputs
-                .Where(x => x.Id == id)
-                .Select(x => new OutputReponse(x))
-                .FirstOrDefaultAsync();
+                                .Where(x => x.Id == id)
+                                .Select(x => new OutputReponse(x) { 
+                                    Id = x.Id,
+                                    ProductId = x.ProductId,
+                                    OutputNumber = x.OutputNumber
+                                })
+                                .FirstOrDefaultAsync();
             if (entity == null) return rspns.NotFound();
 
             return rspns.Succeed(entity);
@@ -94,21 +98,38 @@ namespace BaseApiWithIdentity.Controllers
         public async Task<ResponseModel> Put(int id, OutputReponse value)
         {
             var product = _context.Products.Find(value.ProductId);
+            var entity = _context.Outputs.Find(id);
+            var oriOutput = entity.OutputNumber;
             if (product.StockNumber > 0)
             {
-                var entity = _context.Outputs.Find(id);
-                if (entity == null) 
+                if (entity == null)
                     return rspns.NotFound();
 
                 entity.ProductId = value.ProductId;
                 entity.OutputNumber = value.OutputNumber;
-                entity.OutputPrice = value.OutputPrice * product.ProductPrice;
+                entity.OutputPrice = value.OutputNumber * product.ProductPrice;
                 await _context.SaveChangesAsync();
-                
-                var oriOutput = entity.OutputNumber;
+
                 product.StockNumber += oriOutput;
                 product.StockNumber -= value.OutputNumber;
                 product.SoldNumber -= oriOutput;
+                product.SoldNumber += value.OutputNumber;
+                await _context.SaveChangesAsync();
+                rspns.Succeed();
+            }
+            else if (value.OutputNumber <= oriOutput)
+            {
+                if (entity == null)
+                    return rspns.NotFound();
+
+                entity.ProductId = value.ProductId;
+                entity.OutputNumber = value.OutputNumber;
+                entity.OutputPrice = value.OutputNumber * product.ProductPrice;
+                await _context.SaveChangesAsync();
+
+                product.StockNumber += oriOutput;
+                product.StockNumber += value.OutputNumber;
+                product.SoldNumber += oriOutput;
                 product.SoldNumber += value.OutputNumber;
                 await _context.SaveChangesAsync();
                 rspns.Succeed();

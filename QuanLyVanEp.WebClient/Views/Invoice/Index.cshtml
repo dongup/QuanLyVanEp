@@ -143,14 +143,14 @@
         function openUpdateInvoice(id) {
             $.ajax({
                 type: "GET",
-                url: 'http://localhost:5000/api/Invoice/' + id,
+                url: 'http://localhost:5000/api/Outputs/' + id,
                 data: parseInt(id),
                 success: function (data) {
                     if (data.isSucceed) {
-                        $('#ipt-Invoice-edit-name').val(data.result.InvoiceName);
-                        $('#sel-Invoice-edit-category').val(data.result.categoryId).trigger('change');
+                        $('#sel-invoice-edit-product').val(data.result.productId).trigger('change');
+                        $('#ipt-invoice-edit-number').val(data.result.outputNumber);
                         $('#btn-update-Invoice').attr('onclick', `updateInvoice(${id})`);
-                        $('#modal-Invoice-edit').modal({ backdrop: 'static' });
+                        $('#modal-invoice-edit').modal({ backdrop: 'static' });
                     } else {
                         $(document).Toasts('create', {
                             class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
@@ -162,29 +162,29 @@
         }
 
         function updateInvoice(id) {
-            let name = $('#ipt-Invoice-edit-name').val();
-            let idCategory = $('#sel-Invoice-edit-category').val();
+            let number = $('#ipt-invoice-edit-number').val();
+            let idProduct = $('#sel-invoice-edit-product').val();
 
-            if (name == '') {
+            if (number == '' || number == 0) {
                 $(document).Toasts('create', {
-                    class: 'bg-warning', title: 'Thông báo', body: 'Tên sản phẩm không được để trống', autohide: true, delay: 750
+                    class: 'bg-warning', title: 'Thông báo', body: 'Số lượng không nhỏ hơn 0', autohide: true, delay: 750
                 })
                 return;
             }
 
-            let result = confirm('Bạn có chắc muốn cập nhật sản phẩm này?')
+            let result = confirm('Bạn có chắc muốn tạo hoá đơn này?')
             if (result) {
                 $.ajax({
                     type: "PUT",
-                    url: 'http://localhost:5000/api/Invoice/' + id,
-                    data: JSON.stringify({ InvoiceName: name, categoryId: idCategory }),
+                    url: 'http://localhost:5000/api/Outputs/' + id,
+                    data: JSON.stringify({ outputNumber: parseInt(number), productId: idProduct }),
                     success: function (data) {
                         if (data.isSucceed) {
                             $(document).Toasts('create', {
-                                class: 'bg-success', title: 'Thông báo', body: `Cập nhật sản phẩm thành công`, autohide: true, delay: 750
-                            });
+                                class: 'bg-success', title: 'Thông báo', body: `Điều chỉnh hoá đơn thành công`, autohide: true, delay: 750
+                            })
                             GetInvoice();
-                            $('#modal-Invoice-edit').modal('hide');
+                            $('#modal-invoice-edit').modal('hide');
                         } else {
                             $(document).Toasts('create', {
                                 class: 'bg-warning', title: 'Thông báo', body: data.message, autohide: true, delay: 750
