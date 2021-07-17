@@ -31,6 +31,8 @@ namespace QuanLyVanEp.DataAccess.DAL.Entities.Tables
 
         public string CategoryName { get; set; }
 
+        public string Unit { get; set; }
+
         [ForeignKey(nameof(CategoryId))]
         public ProductCategoryEntity ProductCategory { get; set; }
     }
@@ -50,5 +52,7 @@ namespace QuanLyVanEp.DataAccess.DAL.Entities.Tables
         public string Desciption { get; set; }
 
         public int CategoryId { get; set; }
+
+        public string Unit { get; set; }
     }
 }

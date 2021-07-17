@@ -35,6 +35,7 @@ namespace BaseApiWithIdentity.Controllers
                     ProductPrice = p.ProductPrice,
                     CreatedDate = p.CreatedDate,
                     CategoryName = p.CategoryName,
+                    Unit = p.Unit,
                     Id = p.Id
                 })
                 .ToListAsync();
@@ -69,6 +70,7 @@ namespace BaseApiWithIdentity.Controllers
                 newItem.ProductPrice = value.ProductPrice;
                 newItem.Desciption = value.Desciption;
                 newItem.CategoryId = value.CategoryId;
+                newItem.Unit = value.Unit;
                 newItem.CategoryName = _context.ProductCategories.Find(value.CategoryId)?.Name;
 
                 _context.Products.Add(newItem);
@@ -99,6 +101,7 @@ namespace BaseApiWithIdentity.Controllers
                 item.ProductCode = value.ProductCode;
                 item.ProductPrice = value.ProductPrice;
                 item.CategoryId = value.CategoryId;
+                item.Unit = value.Unit;
                 item.CategoryName = _context.ProductCategories.Find(value.CategoryId)?.Name;
 
                 await _context.SaveChangesAsync();

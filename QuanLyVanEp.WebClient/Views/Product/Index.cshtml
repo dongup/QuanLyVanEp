@@ -22,6 +22,7 @@
                                 <th>Mã sản phẩm</th>
                                 <th>Tên sản phẩm</th>
                                 <th>Giá sản phẩm</th>
+                                <th>Đơn vị tính</th>
                                 <th>Nhóm sản phẩm</th>
                                 <th class="text-center w-140">Ngày tạo</th>
                                 <th class="w-120"></th>
@@ -60,6 +61,7 @@
                                             <td class="text-left">${item.productCode == null || item.productCode == '' ? '' : item.productCode}</td>
                                             <td class="text-left">${item.productName}</td>
                                             <td class="text-left">${item.productPrice == null ? 0 : (Math.round(item.productPrice * 100) / 100).toLocaleString()} VNĐ</td>
+                                            <td class="text-left">${item.unit}</td>
                                             <td class="text-left">${item.categoryName}</td>
                                             <td>${moment(item.createdDate).format('HH:mm DD/MM/yyyy')}</td>
                                             <td>
@@ -113,6 +115,7 @@
             let code = $('#ipt-product-add-code').val();
             let name = $('#ipt-product-add-name').val();
             let price = $('#ipt-product-add-price').val();
+            let unit = $('#ipt-product-add-unit').val();
             let idCategory = $('#sel-product-add-category').val();
 
             if (code == '') {
@@ -130,6 +133,11 @@
                     class: 'bg-warning', title: 'Thông báo', body: 'Giá sản phẩm không nhỏ hơn 0', autohide: true, delay: 750
                 })
                 return;
+            } else if (unit == '') {
+                $(document).Toasts('create', {
+                    class: 'bg-warning', title: 'Thông báo', body: 'Đơn vị tính không được để trống', autohide: true, delay: 750
+                })
+                return;
             } else if (idCategory == null) {
                 $(document).Toasts('create', {
                     class: 'bg-warning', title: 'Thông báo', body: 'Chưa có nhóm sản phẩm, vui lòng thêm trong Nhóm sản phẩm', autohide: true, delay: 750
@@ -139,10 +147,18 @@
 
             let result = confirm('Bạn có chắc muốn tạo sản phẩm này?')
             if (result) {
+                let d = {
+                    productCode: code,
+                    productName: name,
+                    productPrice: parseInt(price),
+                    categoryId: parseInt(idCategory),
+                    unit: unit
+                }
+
                 $.ajax({
                     type: "POST",
                     url: 'http://localhost:5000/api/Product',
-                    data: JSON.stringify({ productCode: code, productName: name, productPrice: parseInt(price), categoryId: parseInt(idCategory) }),
+                    data: JSON.stringify(d),
                     success: function (data) {
                         if (data.isSucceed) {
                             $(document).Toasts('create', {
@@ -171,6 +187,7 @@
                         $('#ipt-product-edit-code').val(data.result.productCode);
                         $('#ipt-product-edit-name').val(data.result.productName);
                         $('#ipt-product-edit-price').val(data.result.productPrice);
+                        $('#ipt-product-edit-unit').val(data.result.unit);
                         $('#sel-product-edit-category').val(data.result.categoryId).trigger('change');
                         $('#btn-update-product').attr('onclick', `updateProduct(${id})`);
                         $('#modal-product-edit').modal({ backdrop: 'static' });
@@ -188,6 +205,7 @@
             let code = $('#ipt-product-edit-code').val();
             let name = $('#ipt-product-edit-name').val();
             let price = $('#ipt-product-edit-price').val();
+            let unit = $('#ipt-product-edit-unit').val();
             let idCategory = $('#sel-product-edit-category').val();
 
             if (code == '') {
@@ -205,6 +223,11 @@
                     class: 'bg-warning', title: 'Thông báo', body: 'Giá sản phẩm không nhỏ hơn 0', autohide: true, delay: 750
                 })
                 return;
+            } else if (unit == '') {
+                $(document).Toasts('create', {
+                    class: 'bg-warning', title: 'Thông báo', body: 'Đơn vị tính không được để trống', autohide: true, delay: 750
+                })
+                return;
             } else if (idCategory == null) {
                 $(document).Toasts('create', {
                     class: 'bg-warning', title: 'Thông báo', body: 'Chưa có nhóm sản phẩm, vui lòng thêm trong Nhóm sản phẩm', autohide: true, delay: 750
@@ -214,10 +237,18 @@
 
             let result = confirm('Bạn có chắc muốn cập nhật sản phẩm này?')
             if (result) {
+                let d = {
+                    productCode: code,
+                    productName: name,
+                    productPrice:
+                    parseInt(price),
+                    categoryId: parseInt(idCategory),
+                    unit: unit
+                }
                 $.ajax({
                     type: "PUT",
                     url: 'http://localhost:5000/api/Product/' + id,
-                    data: JSON.stringify({ productCode: code, productName: name, productPrice: parseInt(price), categoryId: parseInt(idCategory) }),
+                    data: JSON.stringify(d),
                     success: function (data) {
                         if (data.isSucceed) {
                             $(document).Toasts('create', {
