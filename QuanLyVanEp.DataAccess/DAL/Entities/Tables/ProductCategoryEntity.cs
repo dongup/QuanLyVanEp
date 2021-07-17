@@ -12,6 +12,8 @@ namespace QuanLyVanEp.DataAccess.DAL
 
         public string Name { get; set; }
 
+        public string Supplier { get; set; }
+
         public ICollection<ProductEntity> Products { get; set; } = new HashSet<ProductEntity>();
     }
 
@@ -23,5 +25,7 @@ namespace QuanLyVanEp.DataAccess.DAL
         }
 
         public string Name { get; set; }
+
+        public string Supplier { get; set; }
     }
 }

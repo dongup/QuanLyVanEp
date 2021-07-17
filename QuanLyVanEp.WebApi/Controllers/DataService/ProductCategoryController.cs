@@ -52,6 +52,7 @@ namespace BaseApiWithIdentity.Controllers
             if (!found)
             {
                 newItem.Name = value.Name;
+                newItem.Supplier = value.Supplier;
                 _context.ProductCategories.Add(newItem);
 
                 await _context.SaveChangesAsync();
@@ -68,12 +69,13 @@ namespace BaseApiWithIdentity.Controllers
         [HttpPut("{id}")]
         public async Task<ResponseModel> Put(int id, ProductCatergoryRequest value)
         {
-            var found = await _context.ProductCategories.AnyAsync(c => c.Name == value.Name && c.IsDeleted == false);
+            var found = await _context.ProductCategories.AnyAsync(c => c.Name == value.Name && c.Id != id && c.IsDeleted == false);
             if (!found)
             {
                 var entity = _context.ProductCategories.Find(id);
                 if (entity == null) return rspns.NotFound();
                 entity.Name = value.Name;
+                entity.Supplier = value.Supplier;
 
                 await _context.SaveChangesAsync();
                 rspns.Succeed();

@@ -21,6 +21,7 @@
                         <thead>
                             <tr>
                                 <th>Tên nhóm sản phẩm</th>
+                                <th>Nhà cung cấp</th>
                                 <th class="text-center w-140">Ngày tạo</th>
                                 <th class="w-120"></th>
                                 <th class="w-70"></th>
@@ -55,6 +56,7 @@
                             $.each(data.result, function (index, item) {
                                 html += `<tr class="text-center">
                                             <td class="text-left">${item.name}</td>
+                                            <td class="text-left">${item.supplier}</td>
                                             <td>${moment(item.createdDate).format('HH:mm DD/MM/yyyy')}</td>
                                             <td>
                                                 <button type="button" class="btn btn-warning" onclick="openUpdateCategory(${item.id})">Chỉnh sửa</button>
@@ -82,10 +84,16 @@
 
         function addCategory() {
             let name = $('#ipt-category-add-name').val();
+            let supplier = $('#ipt-category-add-supplier').val();
 
             if (name == '') {
                 $(document).Toasts('create', {
                     class: 'bg-warning', title: 'Thông báo', body: 'Tên nhóm sản phẩm không được để trống', autohide: true, delay: 750
+                })
+                return;
+            } else if (supplier == '') {
+                $(document).Toasts('create', {
+                    class: 'bg-warning', title: 'Thông báo', body: 'Nhà cung cấp không được để trống', autohide: true, delay: 750
                 })
                 return;
             }
@@ -95,7 +103,7 @@
                 $.ajax({
                     type: "POST",
                     url: 'http://localhost:5000/api/ProductCategory',
-                    data: JSON.stringify({ name: name }),
+                    data: JSON.stringify({ name: name, supplier: supplier }),
                     success: function (data) {
                         if (data.isSucceed) {
                             $(document).Toasts('create', {
@@ -122,6 +130,7 @@
                 success: function (data) {
                     if (data.isSucceed) {
                         $('#ipt-category-edit-name').val(data.result.name);
+                        $('#ipt-category-edit-supplier').val(data.result.supplier);
                         $('#btn-update-category').attr('onclick', `updateCategory(${id})`);
                         $('#modal-category-edit').modal({ backdrop: 'static' });
                     } else {
@@ -136,10 +145,16 @@
 
         function updateCategory(id) {
             let name = $('#ipt-category-edit-name').val();
+            let supplier = $('#ipt-category-edit-supplier').val();
 
             if (name == '') {
                 $(document).Toasts('create', {
                     class: 'bg-warning', title: 'Thông báo', body: 'Tên nhóm sản phẩm không được để trống', autohide: true, delay: 750
+                })
+                return;
+            } else if (supplier == '') {
+                $(document).Toasts('create', {
+                    class: 'bg-warning', title: 'Thông báo', body: 'Nhà cung cấp không được để trống', autohide: true, delay: 750
                 })
                 return;
             }
@@ -149,7 +164,7 @@
                 $.ajax({
                     type: "PUT",
                     url: 'http://localhost:5000/api/ProductCategory/' + parseInt(id),
-                    data: JSON.stringify({ name: name }),
+                    data: JSON.stringify({ name: name, supplier: supplier }),
                     success: function (data) {
                         if (data.isSucceed) {
                             $(document).Toasts('create', {
